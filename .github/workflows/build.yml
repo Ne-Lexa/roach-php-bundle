@@ -35,7 +35,7 @@ jobs:
                     tools: composer:v2, flex
 
             -   name: Set coverage args
-                if: matrix.php == '8.0'
+                if: matrix.php == '8.0' && matrix.symfony_version == '5.4.*' && matrix.dependency-version == 'prefer-stable' && matrix.os == 'ubuntu-latest'
                 run: echo "PHPUNIT_COVERAGE=1" >> $GITHUB_ENV
 
             -   name: Determine composer cache directory

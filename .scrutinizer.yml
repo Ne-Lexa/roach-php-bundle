@@ -8,11 +8,13 @@ tools:
     php_mess_detector: true
     php_code_sniffer: true
     sensiolabs_security_checker: true
-nodes:
-    analysis:
-        project_setup:
-            override:
-                - 'true'
-        tests:
-            override:
-                - php ./vendor/bin/simple-phpunit --configuration phpunit.xml.dist
+    php_code_coverage: true
+build:
+    nodes:
+        analysis:
+            project_setup:
+                override:
+                    - 'true'
+            tests:
+                override:
+                    - php ./vendor/bin/simple-phpunit --configuration phpunit.xml.dist
