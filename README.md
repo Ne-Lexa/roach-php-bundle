@@ -5,7 +5,7 @@ Symfony bundle for [Roach PHP](https://roach-php.dev).
 
 [![Packagist Version](https://img.shields.io/packagist/v/nelexa/roach-php-bundle)](https://packagist.org/packages/nelexa/roach-php-bundle)
 [![Packagist PHP Version Support](https://img.shields.io/packagist/php-v/nelexa/roach-php-bundle)](https://packagist.org/packages/nelexa/roach-php-bundle)
-[![Build Status](https://github.com/Ne-Lexa/roach-php-bundle/workflows/build/badge.svg)](https://github.com/Ne-Lexa/roach-php-bundle/actions)
+[![Tests](https://github.com/Ne-Lexa/roach-php-bundle/actions/workflows/build.yml/badge.svg)](https://github.com/Ne-Lexa/roach-php-bundle/actions/workflows/build.yml)
 [![Build Status](https://scrutinizer-ci.com/g/Ne-Lexa/roach-php-bundle/badges/build.png?b=main)](https://scrutinizer-ci.com/g/Ne-Lexa/roach-php-bundle/build-status/main)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/Ne-Lexa/roach-php-bundle/badges/quality-score.png?b=main)](https://scrutinizer-ci.com/g/Ne-Lexa/roach-php-bundle/?branch=main)
 [![Code Coverage](https://scrutinizer-ci.com/g/Ne-Lexa/roach-php-bundle/badges/coverage.png?b=main)](https://scrutinizer-ci.com/g/Ne-Lexa/roach-php-bundle/?branch=main)
