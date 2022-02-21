@@ -34,10 +34,6 @@ jobs:
                     ini-values: ${{ env.PHP_INI }}
                     tools: composer:v2, flex
 
-            -   name: Set coverage args
-                if: matrix.php == '8.0' && matrix.symfony_version == '5.4.*' && matrix.dependency-version == 'prefer-stable' && matrix.os == 'ubuntu-latest'
-                run: echo "PHPUNIT_COVERAGE=1" >> $GITHUB_ENV
-
             -   name: Determine composer cache directory
                 run: echo "COMPOSER_CACHE_DIR=$(composer config cache-dir)" >> $GITHUB_ENV
 
@@ -65,20 +61,12 @@ jobs:
                     SYMFONY_REQUIRE: ${{ matrix.symfony_version }}
                 run: composer update --prefer-dist --no-interaction --no-progress --optimize-autoloader --ansi --${{ matrix.dependency-version }}
 
+            -   name: Install PHPUnit
+                run: vendor/bin/simple-phpunit install
+
             -   name: Run psalm
                 if: matrix.symfony_version != '5.3.*'
                 run: vendor/bin/psalm
 
             -   name: Run tests with phpunit
-                if: env.PHPUNIT_COVERAGE == 0
                 run: vendor/bin/simple-phpunit -v -c phpunit.xml.dist
-
-            -   name: Run tests with phpunit and coverage
-                if: env.PHPUNIT_COVERAGE == 1
-                run: vendor/bin/simple-phpunit -v -c phpunit.xml.dist --coverage-clover=coverage.clover
-
-            -   name: Upload code coverage scrutinizer
-                if: env.PHPUNIT_COVERAGE == 1
-                run: |
-                    wget https://scrutinizer-ci.com/ocular.phar
-                    php ocular.phar code-coverage:upload --format=php-clover coverage.clover
