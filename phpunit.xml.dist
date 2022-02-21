@@ -26,6 +26,9 @@
         <include>
             <directory suffix=".php">src</directory>
         </include>
+        <exclude>
+            <directory suffix=".tpl.php">.</directory>
+        </exclude>
     </coverage>
 
     <listeners>

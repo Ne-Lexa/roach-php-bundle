@@ -15,21 +15,21 @@ namespace Nelexa\RoachPhpBundle\Maker\Spider;
 
 use Nelexa\RoachPhpBundle\Maker\AbstractMaker;
 
-final class MakeResponseMiddleware extends AbstractMaker
+final class MakeItemMiddleware extends AbstractMaker
 {
     public static function getCommandName(): string
     {
-        return 'make:roach:middleware:spider:response';
+        return 'make:roach:middleware:spider:item';
     }
 
     protected static function getDescriptionClass(): string
     {
-        return 'spider response middleware';
+        return 'spider item middleware';
     }
 
     protected function getSuffix(): string
     {
-        return 'ResponseMiddleware';
+        return 'ItemMiddleware';
     }
 
     protected function getNamespace(): string
@@ -39,6 +39,6 @@ final class MakeResponseMiddleware extends AbstractMaker
 
     protected function getTemplateFilename(): string
     {
-        return __DIR__ . '/../../Resources/skeleton/Spider/ResponseMiddleware.tpl.php';
+        return __DIR__ . '/../../Resources/skeleton/Spider/ItemMiddleware.tpl.php';
     }
 }

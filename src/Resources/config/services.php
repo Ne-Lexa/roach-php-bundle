@@ -2,21 +2,32 @@
 
 declare(strict_types=1);
 
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+/*
+ * Copyright (c) 2022 Ne-Lexa <alexey@nelexa.ru>
+ *
+ * For the full copyright and license information, please view
+ * the LICENSE file that was distributed with this source code.
+ *
+ * @see https://github.com/Ne-Lexa/roach-php-bundle
+ */
 
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
+use function Symfony\Component\DependencyInjection\Loader\Configurator\tagged_locator;
 
 return static function (ContainerConfigurator $container): void {
     $services = $container->services()
         ->defaults()
         ->public()
         ->autoconfigure(false)
-        ->autowire(true);
+        ->autowire(false)
+    ;
 
     // Scheduling
     $services
         ->set('roach_php.request_scheduler', \RoachPHP\Scheduling\ArrayRequestScheduler::class)
-        ->args([service(\RoachPHP\Scheduling\Timing\ClockInterface::class)]);
+        ->args([service(\RoachPHP\Scheduling\Timing\ClockInterface::class)])
+    ;
     $services->alias(
         \RoachPHP\Scheduling\RequestSchedulerInterface::class,
         'roach_php.request_scheduler'
@@ -35,37 +46,33 @@ return static function (ContainerConfigurator $container): void {
     $services
         ->set('roach_php.item_pipeline', \RoachPHP\ItemPipeline\ItemPipeline::class)
         ->args([
-            service('event_dispatcher')
-        ]);
+            service('event_dispatcher'),
+        ])
+    ;
     $services->alias(\RoachPHP\ItemPipeline\ItemPipelineInterface::class, 'roach_php.item_pipeline');
-    $services->instanceof(\RoachPHP\ItemPipeline\Processors\ItemProcessorInterface::class)->autowire(true)->public();
 
     // Spider
     $services
-        ->instanceof(\RoachPHP\Spider\SpiderInterface::class)
-        ->public()
-        ->autowire(true)
-        ->tag('roach_php.spider')
-    ;
-    $services
         ->set(\RoachPHP\Spider\Processor::class)
         ->args([
-            service('event_dispatcher')
+            service('event_dispatcher'),
         ])
     ;
-    $services->set(\RoachPHP\Spider\Middleware\MaximumCrawlDepthMiddleware::class)->public();
-    $services->instanceof(\RoachPHP\Spider\SpiderMiddlewareInterface::class)->autowire(true)->public();
-    $services->instanceof(\RoachPHP\Spider\Middleware\ItemMiddlewareInterface::class)->autowire(true)->public();
-    $services->instanceof(\RoachPHP\Spider\Middleware\RequestMiddlewareInterface::class)->autowire(true)->public();
-    $services->instanceof(\RoachPHP\Spider\Middleware\ResponseMiddlewareInterface::class)->autowire(true)->public();
+    $services->set(\RoachPHP\Spider\Middleware\MaximumCrawlDepthMiddleware::class);
 
     $services
-        ->instanceof(\RoachPHP\Support\ConfigurableInterface::class)
-        ->public()
-        ->autowire(true)
+        ->set('roach_php.logger.stream_handler', \Monolog\Handler\StreamHandler::class)
+        ->args(['php://stdout'])
     ;
-
-    $services->alias('roach_php.logger', 'logger');
+    $services
+        ->set('roach_php.logger', \Monolog\Logger::class)
+        ->args([
+            'roach',
+            [
+                service('roach_php.logger.stream_handler'),
+            ],
+        ])
+    ;
 
     $services
         ->set(\RoachPHP\Core\Engine::class)
@@ -74,7 +81,7 @@ return static function (ContainerConfigurator $container): void {
             service(\RoachPHP\Downloader\Downloader::class),
             service(\RoachPHP\ItemPipeline\ItemPipelineInterface::class),
             service(\RoachPHP\Spider\Processor::class),
-            service('event_dispatcher')
+            service('event_dispatcher'),
         ])
     ;
 
@@ -83,42 +90,76 @@ return static function (ContainerConfigurator $container): void {
         ->set(\RoachPHP\Downloader\Downloader::class)
         ->args([
             service(\RoachPHP\Http\ClientInterface::class),
-            service('event_dispatcher')
+            service('event_dispatcher'),
         ])
     ;
-    $services->set(\RoachPHP\Downloader\Middleware\CookieMiddleware::class)->public();
+    $services->set(\RoachPHP\Downloader\Middleware\CookieMiddleware::class);
     $services
         ->set(\RoachPHP\Downloader\Middleware\RequestDeduplicationMiddleware::class)
         ->args([
-            service('roach_php.logger')
+            service('roach_php.logger'),
         ])
-        ->public();
-    $services->set(\RoachPHP\Downloader\Middleware\RobotsTxtMiddleware::class)->public();
-    $services->set(\RoachPHP\Downloader\Middleware\UserAgentMiddleware::class)->public();
-    $services->instanceof(\RoachPHP\Downloader\DownloaderMiddlewareInterface::class)->autowire(true)->public();
-    $services->instanceof(\RoachPHP\Downloader\Middleware\RequestMiddlewareInterface::class)->autowire(true)->public();
-    $services->instanceof(\RoachPHP\Downloader\Middleware\ResponseMiddlewareInterface::class)->autowire(true)->public();
+    ;
+    $services->set(\RoachPHP\Downloader\Middleware\RobotsTxtMiddleware::class);
+    $services->set(\RoachPHP\Downloader\Middleware\UserAgentMiddleware::class);
 
     // Extensions
     $services
         ->set(\RoachPHP\Extensions\LoggerExtension::class)
         ->args([
-            service('roach_php.logger')
+            service('roach_php.logger'),
         ])
-        ->public();
-    $services->set(\RoachPHP\Extensions\MaxRequestExtension::class)->public();
+    ;
+    $services->set(\RoachPHP\Extensions\MaxRequestExtension::class);
     $services
         ->set(\RoachPHP\Extensions\StatsCollectorExtension::class)
         ->args([
             service('roach_php.logger'),
-            service('roach_php.clock')
+            service('roach_php.clock'),
         ])
-        ->public();
-
-
-    $services->instanceof(\RoachPHP\Extensions\ExtensionInterface::class)->autowire(true)->public();
-    $services->instanceof(\RoachPHP\Downloader\Middleware\RequestMiddlewareInterface::class)
-        ->tag('roach_php.request_middleware')
     ;
 
+    // commands
+    $services->set(\RoachPHP\Shell\Repl::class)->tag('console.command');
+    $services
+        ->set(\Nelexa\RoachPhpBundle\Command\RunSpiderCommand::class)
+        ->args([
+            tagged_locator('roach_php.spider'),
+        ])
+        ->tag('console.command')
+    ;
+
+    // maker
+    $services
+        ->set(\Nelexa\RoachPhpBundle\Maker\MakeSpider::class)
+        ->tag('maker.command')
+    ;
+    $services
+        ->set(\Nelexa\RoachPhpBundle\Maker\MakeExtension::class)
+        ->tag('maker.command')
+    ;
+    $services
+        ->set(\Nelexa\RoachPhpBundle\Maker\MakeItemProcessor::class)
+        ->tag('maker.command')
+    ;
+    $services
+        ->set(\Nelexa\RoachPhpBundle\Maker\Downloader\MakeRequestMiddleware::class)
+        ->tag('maker.command')
+    ;
+    $services
+        ->set(\Nelexa\RoachPhpBundle\Maker\Downloader\MakeResponseMiddleware::class)
+        ->tag('maker.command')
+    ;
+    $services
+        ->set(\Nelexa\RoachPhpBundle\Maker\Spider\MakeRequestMiddleware::class)
+        ->tag('maker.command')
+    ;
+    $services
+        ->set(\Nelexa\RoachPhpBundle\Maker\Spider\MakeResponseMiddleware::class)
+        ->tag('maker.command')
+    ;
+    $services
+        ->set(\Nelexa\RoachPhpBundle\Maker\Spider\MakeItemMiddleware::class)
+        ->tag('maker.command')
+    ;
 };

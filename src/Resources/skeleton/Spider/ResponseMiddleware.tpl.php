@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace <?= $namespace; ?>;
 
-use RoachPHP\Downloader\Middleware\ResponseMiddlewareInterface;
+use RoachPHP\Spider\Middleware\ResponseMiddlewareInterface;
 use RoachPHP\Http\Response;
 use RoachPHP\Support\Configurable;
 

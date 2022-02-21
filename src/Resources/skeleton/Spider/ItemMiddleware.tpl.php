@@ -4,18 +4,25 @@ declare(strict_types=1);
 
 namespace <?= $namespace; ?>;
 
-use RoachPHP\Spider\Middleware\ResponseMiddlewareInterface;
+use RoachPHP\Spider\Middleware\ItemMiddlewareInterface;
 use RoachPHP\Http\Response;
+use RoachPHP\ItemPipeline\ItemInterface;
 use RoachPHP\Support\Configurable;
 
-final class <?= $class_name; ?> implements ResponseMiddlewareInterface<?= "\n"; ?>
+final class <?= $class_name; ?> implements ItemMiddlewareInterface<?= "\n"; ?>
 {
     use Configurable;
 
-    public function handleResponse(Response $response): Response
+    /**
+     * Handles an item that got emitted while parsing $response.
+     */
+    public function handleItem(
+        ItemInterface $item,
+        Response $response,
+    ): ItemInterface
     {
-        // TODO: Implement handleResponse() method.
-        return $response;
+        // TODO: Implement handleItem() method.
+        return $item;
     }
 
     private function defaultOptions(): array
