@@ -24,7 +24,7 @@ Register bundle into config/bundles.php (Flex did it automatically):
 ```php
 return [
     //...
-    \Nelexa\roach-php-bundle\roach-php-bundle::class => ['all' => true],
+    \Nelexa\RoachPhpBundle\RoachPhpBundle::class => ['all' => true],
 ];
 ```
 
