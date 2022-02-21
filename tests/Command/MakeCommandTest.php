@@ -15,6 +15,7 @@ namespace Nelexa\RoachPhpBundle\Tests\Command;
 
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Tester\CommandTester;
 
 /**
@@ -42,7 +43,11 @@ class MakeCommandTest extends KernelTestCase
             $commandTester = new CommandTester($command);
             $commandTester->execute($input);
 
-            $commandTester->assertCommandIsSuccessful();
+            if (method_exists($commandTester, 'assertCommandIsSuccessful')) {
+                $commandTester->assertCommandIsSuccessful();
+            } else {
+                static::assertSame(Command::SUCCESS, $commandTester->getStatusCode());
+            }
 
             static::assertStringContainsString($outputPath, $commandTester->getDisplay());
             static::assertFileExists($outputFilename);

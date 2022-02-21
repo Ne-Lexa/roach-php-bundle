@@ -38,9 +38,8 @@ jobs:
                 if: matrix.php == '8.0'
                 run: echo "PHPUNIT_COVERAGE=1" >> $GITHUB_ENV
 
-            -
-                name: Determine composer cache directory
-                run:  echo "COMPOSER_CACHE_DIR=$(composer config cache-dir)" >> $GITHUB_ENV
+            -   name: Determine composer cache directory
+                run: echo "COMPOSER_CACHE_DIR=$(composer config cache-dir)" >> $GITHUB_ENV
 
             -   name: Cache dependencies installed with composer
                 uses: actions/cache@v2
@@ -67,6 +66,7 @@ jobs:
                 run: composer update --prefer-dist --no-interaction --no-progress --optimize-autoloader --ansi --${{ matrix.dependency-version }}
 
             -   name: Run psalm
+                if: matrix.symfony_version != '5.3.*'
                 run: vendor/bin/psalm
 
             -   name: Run tests with phpunit

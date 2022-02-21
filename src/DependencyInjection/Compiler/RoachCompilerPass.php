@@ -40,9 +40,9 @@ final class RoachCompilerPass implements CompilerPassInterface
     /**
      * @param array<string> $serviceTags
      *
-     * @return iterable<string>
+     * @return \Generator<string>
      */
-    private function iterateTags(ContainerBuilder $container, array $serviceTags): iterable
+    private function iterateTags(ContainerBuilder $container, array $serviceTags): \Generator
     {
         foreach ($serviceTags as $tag) {
             foreach (array_keys($container->findTaggedServiceIds($tag)) as $id) {

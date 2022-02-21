@@ -15,6 +15,7 @@ namespace Nelexa\RoachPhpBundle\Tests\Command;
 
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Tester\CommandTester;
 
 /**
@@ -35,7 +36,11 @@ class RunSpiderCommandTest extends KernelTestCase
             'spider' => 'quotes',
         ]);
 
-        $commandTester->assertCommandIsSuccessful();
+        if (method_exists($commandTester, 'assertCommandIsSuccessful')) {
+            $commandTester->assertCommandIsSuccessful();
+        } else {
+            static::assertSame(Command::SUCCESS, $commandTester->getStatusCode());
+        }
     }
 
     public function testUnknownSpider(): void
