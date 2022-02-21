@@ -1,10 +1,9 @@
 {
     "name": "nelexa/roach-php-bundle",
-    "version": "0.1.0",
-    "description": "roach-php Symfony Bundle",
+    "description": "Symfony bundle for roach-php/core",
     "type": "symfony-bundle",
     "require": {
-        "php": ">=8.0.2",
+        "php": ">= 8.0",
         "roach-php/core": "^0.3.0",
         "symfony/config": "^5.3 | ^6.0",
         "symfony/dependency-injection": "^5.3 | ^6.0",
@@ -12,9 +11,14 @@
         "symfony/console": "^5.3 | ^6.0"
     },
     "require-dev": {
+        "roave/security-advisories": "dev-latest",
         "symfony/phpunit-bridge": "^5.3 | ^6.0",
         "symfony/var-dumper": "^5.3 | ^6.0",
-        "symfony/framework-bundle": "^5.3 | ^6.0"
+        "symfony/framework-bundle": "^5.3 | ^6.0",
+        "symfony/maker-bundle": "^1.37",
+        "vimeo/psalm": "^4.21",
+        "psalm/plugin-symfony": "^3.1",
+        "psalm/plugin-phpunit": "^0.16.1"
     },
     "license": "MIT",
     "autoload": {
@@ -24,7 +28,8 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Nelexa\\RoachPhpBundle\\Tests\\": "tests/"
+            "Nelexa\\RoachPhpBundle\\Tests\\": "tests/",
+            "App\\": "tests/App"
         }
     },
     "authors": [

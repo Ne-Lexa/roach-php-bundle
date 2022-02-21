@@ -1,36 +1,53 @@
 <?php
 
+declare(strict_types=1);
+
+/*
+ * Copyright (c) 2022 Ne-Lexa <alexey@nelexa.ru>
+ *
+ * For the full copyright and license information, please view
+ * the LICENSE file that was distributed with this source code.
+ *
+ * @see https://github.com/Ne-Lexa/roach-php-bundle
+ */
+
 namespace Nelexa\RoachPhpBundle\DependencyInjection\Compiler;
 
-use RoachPHP\Roach;
+use Nelexa\RoachPhpBundle\DependencyInjection\RoachPhpExtension;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Reference;
 
 final class RoachCompilerPass implements CompilerPassInterface
 {
     public function process(ContainerBuilder $container): void
     {
-        // does the trick and inject the container even if its a static method
-//        $container
-//            ->getDefinition(Roach::class)
-//            ->addMethodCall('useContainer', [new Reference('service_container')])
-//            ->setPublic(true);
+        $tags = array_values(RoachPhpExtension::TAGS);
 
-        foreach ($container->findTaggedServiceIds('roach_php.spider') as $id => $tags) {
-            $container->getDefinition($id)->setPublic(true)->setAutowired(true);
+        foreach ($this->iterateTags($container, $tags) as $id) {
+            $container
+                ->getDefinition($id)
+                ->setPublic(true)
+                ->setAutowired(true)
+                ->setAutoconfigured(true)
+            ;
         }
 
-        foreach ($container->findTaggedServiceIds('roach_php.item_processor') as $id => $tags) {
-            $container->getDefinition($id)->setPublic(true)->setAutowired(true);
+        foreach ($this->iterateTags($container, RoachPhpExtension::CLEAR_EVENT_SUBSCRIBER_TAGS) as $id) {
+            $container->getDefinition($id)->clearTag('kernel.event_subscriber');
         }
+    }
 
-        foreach ($container->findTaggedServiceIds('roach_php.extension') as $id => $tags) {
-            $container->getDefinition($id)->setPublic(true)->setAutowired(true);
-        }
-
-        foreach ($container->findTaggedServiceIds('roach_php.request_middleware') as $id => $tags) {
-            $container->getDefinition($id)->setPublic(true)->setAutowired(true);
+    /**
+     * @param array<string> $serviceTags
+     *
+     * @return iterable<string>
+     */
+    private function iterateTags(ContainerBuilder $container, array $serviceTags): iterable
+    {
+        foreach ($serviceTags as $tag) {
+            foreach (array_keys($container->findTaggedServiceIds($tag)) as $id) {
+                yield $id;
+            }
         }
     }
 }

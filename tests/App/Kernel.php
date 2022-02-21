@@ -1,14 +1,24 @@
 <?php
 
+declare(strict_types=1);
+
+/*
+ * Copyright (c) 2022 Ne-Lexa <alexey@nelexa.ru>
+ *
+ * For the full copyright and license information, please view
+ * the LICENSE file that was distributed with this source code.
+ *
+ * @see https://github.com/Ne-Lexa/roach-php-bundle
+ */
+
 namespace Nelexa\RoachPhpBundle\Tests\App;
 
-use Psr\Log\LoggerInterface;
 use RoachPHP\Testing\FakeLogger;
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symfony\Component\HttpKernel\Kernel as BaseKernel;
 
-class Kernel extends BaseKernel
+final class Kernel extends BaseKernel
 {
     use MicroKernelTrait;
 
@@ -16,6 +26,7 @@ class Kernel extends BaseKernel
     {
         return [
             new \Symfony\Bundle\FrameworkBundle\FrameworkBundle(),
+            new \Symfony\Bundle\MakerBundle\MakerBundle(),
             new \Nelexa\RoachPhpBundle\RoachPhpBundle(),
         ];
     }
@@ -44,12 +55,11 @@ class Kernel extends BaseKernel
             ->autowire(true)
             ->autoconfigure(true)
             ->public()
-            ->load('Nelexa\RoachPhpBundle\Tests\App\\', __DIR__.'/*')
-            ->exclude(__DIR__.'/{DependencyInjection,Entity,Tests,Kernel.php}')
+            ->load('Nelexa\RoachPhpBundle\Tests\App\\', __DIR__ . '/*')
+            ->exclude(__DIR__ . '/{DependencyInjection,Entity,Tests,Kernel.php}')
         ;
 
         $container->services()->set(FakeLogger::class);
-        $container->services()->alias('logger', FakeLogger::class);
-        $container->services()->alias(LoggerInterface::class, FakeLogger::class);
+        $container->services()->alias('roach_php.logger', FakeLogger::class);
     }
 }

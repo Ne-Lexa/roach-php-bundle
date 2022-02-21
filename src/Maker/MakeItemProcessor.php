@@ -13,30 +13,30 @@ declare(strict_types=1);
 
 namespace Nelexa\RoachPhpBundle\Maker;
 
-final class MakeExtension extends AbstractMaker
+final class MakeItemProcessor extends AbstractMaker
 {
     public static function getCommandName(): string
     {
-        return 'make:roach:extension';
+        return 'make:roach:item:processor';
     }
 
-    public static function getCommandDescription(): string
+    protected static function getDescriptionClass(): string
     {
-        return 'Create a new roach extension class';
+        return 'item processor';
     }
 
     protected function getSuffix(): string
     {
-        return 'Extension';
+        return 'ItemProcessor';
     }
 
     protected function getNamespace(): string
     {
-        return 'Spider\\Extension\\';
+        return 'Spider\\ItemProcessor\\';
     }
 
     protected function getTemplateFilename(): string
     {
-        return __DIR__ . '/../Resources/skeleton/Extension.tpl.php';
+        return __DIR__ . '/../Resources/skeleton/ItemProcessor.tpl.php';
     }
 }

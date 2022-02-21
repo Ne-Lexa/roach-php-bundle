@@ -1,111 +1,84 @@
-name: build
+name: Tests
 
 on: [ push, pull_request ]
 
 jobs:
     tests:
-        name: PHP ${{ matrix.php }} / Symfony ${{ matrix.symfony_version }} / ${{ matrix.os }}
+        name: PHP ${{ matrix.php }} / Symfony ${{ matrix.symfony_version }} / ${{ matrix.os }} / ${{ matrix.dependency-version }}
 
         env:
-            extensions:       mbstring
-            key:              cache-v1
+            extensions: dom, curl
+            key: cache-v1
             PHPUNIT_COVERAGE: 0
-            PHP_INI:          date.timezone='UTC', memory_limit=-1
+            PHP_INI: date.timezone='UTC', memory_limit=-1
 
         strategy:
             matrix:
-                os:
-                    - 'ubuntu-latest'
-                php:
-                    - '7.4'
-                    - '8.0'
-                    - '8.1'
-                symfony_version:
-                    - '5.1.*'
-                    - '5.2.*'
-                    - '5.3.*'
-                    - '5.4.*'
-                    - '6.0.*'
-                exclude:
-                    - os: 'ubuntu-latest'
-                      symfony_version: '5.1.*'
-                      php: '8.1'
-                    - os: 'ubuntu-latest'
-                      symfony_version: '5.2.*'
-                      php: '8.1'
-                    - os: 'ubuntu-latest'
-                      symfony_version: '6.0.*'
-                      php: '7.4'
+                os: [ 'ubuntu-latest' ]
+                php: [ '8.0', '8.1' ]
+                symfony_version: [ '5.3.*', '5.4.*', '6.0.*' ]
+                dependency-version: [ 'prefer-lowest', 'prefer-stable' ]
 
         runs-on: ${{ matrix.os }}
 
         steps:
-            -
-                name: Checkout
+            -   name: Checkout
                 uses: actions/checkout@v2
 
-            -
-                name: Setup PHP
+            -   name: Setup PHP
                 uses: shivammathur/setup-php@v2
                 with:
                     php-version: ${{ matrix.php }}
-                    extensions:  ${{ env.extensions }}
-                    coverage:    pcov
-                    ini-values:  ${{ env.PHP_INI }}
-                    tools:       composer:v2, flex
+                    extensions: ${{ env.extensions }}
+                    coverage: pcov
+                    ini-values: ${{ env.PHP_INI }}
+                    tools: composer:v2, flex
 
-#            -
-#                name: Determine composer cache directory
-#                run:  echo "COMPOSER_CACHE_DIR=$(composer config cache-dir)" >> $GITHUB_ENV
-
-            -
-                name: Set coverage args
-                if:   matrix.php == '7.4'
-                run:  echo "PHPUNIT_COVERAGE=1" >> $GITHUB_ENV
-
-#            -
-#                name: Cache composer dependencies
-#                uses: actions/cache@v2
-#                with:
-#                    path:         ${{ env.COMPOSER_CACHE_DIR }}
-#                    key:          php${{ matrix.php }}-composer-${{ hashFiles('**/composer.json') }}
-#                    restore-keys: php${{ matrix.php }}-composer-
+            -   name: Set coverage args
+                if: matrix.php == '8.0'
+                run: echo "PHPUNIT_COVERAGE=1" >> $GITHUB_ENV
 
             -
-                name: Check PHP Version
-                run:  php -v
+                name: Determine composer cache directory
+                run:  echo "COMPOSER_CACHE_DIR=$(composer config cache-dir)" >> $GITHUB_ENV
 
-            -
-                name: Check Composer Version
-                run:  composer -V
+            -   name: Cache dependencies installed with composer
+                uses: actions/cache@v2
+                with:
+                    path: "${{ env.COMPOSER_CACHE_DIR }}"
+                    key: "php-${{ matrix.php }}-composer-${{ matrix.dependency-version }}-${{ matrix.symfony_version }}-${{ matrix.os }}-${{ hashFiles('composer.lock') }}"
+                    restore-keys: "php-${{ matrix.php }}-composer-${{ matrix.dependency-version }}-${{ matrix.symfony_version }}-${{ matrix.os }}-"
 
-            -
-                name: Check PHP Extensions
-                run:  php -m
+            -   name: Print PHP Version
+                run: php -v
 
-            -
-                name: Validate composer.json and composer.lock
-                run:  composer validate
+            -   name: Print Composer Version
+                run: composer -V
 
-            -
-                name: Install dependencies with composer
+            -   name: Print PHP Extensions
+                run: php -m
+
+            -   name: Validate composer.json and composer.lock
+                run: composer validate --strict
+
+            -   name: Install dependencies
                 env:
                     SYMFONY_REQUIRE: ${{ matrix.symfony_version }}
-                run:  composer update --prefer-dist --no-interaction --no-progress --optimize-autoloader --ansi
+                run: composer update --prefer-dist --no-interaction --no-progress --optimize-autoloader --ansi --${{ matrix.dependency-version }}
 
-            -
-                name: Run tests with phpunit
-                if:   env.PHPUNIT_COVERAGE == 0
-                run:  vendor/bin/simple-phpunit -v -c phpunit.xml.dist
+            -   name: Run psalm
+                run: vendor/bin/psalm
 
-            -
-                name: Run tests with phpunit and coverage
-                if:   env.PHPUNIT_COVERAGE == 1
-                run:  vendor/bin/simple-phpunit -v -c phpunit.xml.dist --coverage-clover=coverage.clover
+            -   name: Run tests with phpunit
+                if: env.PHPUNIT_COVERAGE == 0
+                run: vendor/bin/simple-phpunit -v -c phpunit.xml.dist
 
-            -
-                name: Upload code coverage scrutinizer
-                if:   env.PHPUNIT_COVERAGE == 1
-                run:  |
-                      wget https://scrutinizer-ci.com/ocular.phar
-                      php ocular.phar code-coverage:upload --format=php-clover coverage.clover
+            -   name: Run tests with phpunit and coverage
+                if: env.PHPUNIT_COVERAGE == 1
+                run: vendor/bin/simple-phpunit -v -c phpunit.xml.dist --coverage-clover=coverage.clover
+
+            -   name: Upload code coverage scrutinizer
+                if: env.PHPUNIT_COVERAGE == 1
+                run: |
+                    wget https://scrutinizer-ci.com/ocular.phar
+                    php ocular.phar code-coverage:upload --format=php-clover coverage.clover

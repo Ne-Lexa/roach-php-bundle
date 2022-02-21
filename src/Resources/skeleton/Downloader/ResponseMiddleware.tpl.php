@@ -4,18 +4,18 @@ declare(strict_types=1);
 
 namespace <?= $namespace; ?>;
 
-use RoachPHP\Downloader\Middleware\RequestMiddlewareInterface;
-use RoachPHP\Http\Request;
+use RoachPHP\Downloader\Middleware\ResponseMiddlewareInterface;
+use RoachPHP\Http\Response;
 use RoachPHP\Support\Configurable;
 
-final class <?= $class_name; ?> implements RequestMiddlewareInterface<?= "\n"; ?>
+final class <?= $class_name; ?> implements ResponseMiddlewareInterface<?= "\n"; ?>
 {
     use Configurable;
 
-    public function handleRequest(Request $request): Request
+    public function handleResponse(Response $response): Response
     {
-        // TODO: Implement handleRequest() method.
-        return $request;
+        // TODO: Implement handleResponse() method.
+        return $response;
     }
 
     private function defaultOptions(): array

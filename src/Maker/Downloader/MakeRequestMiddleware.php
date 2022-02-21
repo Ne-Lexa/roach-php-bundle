@@ -11,37 +11,34 @@ declare(strict_types=1);
  * @see https://github.com/Ne-Lexa/roach-php-bundle
  */
 
-namespace Nelexa\RoachPhpBundle\Maker;
+namespace Nelexa\RoachPhpBundle\Maker\Downloader;
 
-final class MakeExtension extends AbstractMaker
+use Nelexa\RoachPhpBundle\Maker\AbstractMaker;
+
+final class MakeRequestMiddleware extends AbstractMaker
 {
     public static function getCommandName(): string
     {
-        return 'make:roach:extension';
+        return 'make:roach:middleware:downloader:request';
     }
 
-    public static function getCommandDescription(): string
+    protected static function getDescriptionClass(): string
     {
-        return 'Create a new roach extension class';
+        return 'downloader request middleware';
     }
 
     protected function getSuffix(): string
     {
-        return 'Extension';
+        return 'RequestMiddleware';
     }
 
     protected function getNamespace(): string
     {
-        return 'Spider\\Extension\\';
-    }
-
-    protected function getHelpFilename(): string
-    {
-        return __DIR__ . '/../Resources/help/MakeExtension.txt';
+        return 'Spider\\Middleware\\Downloader\\';
     }
 
     protected function getTemplateFilename(): string
     {
-        return __DIR__ . '/../Resources/skeleton/Extension.tpl.php';
+        return __DIR__ . '/../../Resources/skeleton/Downloader/RequestMiddleware.tpl.php';
     }
 }

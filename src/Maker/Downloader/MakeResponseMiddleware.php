@@ -15,21 +15,21 @@ namespace Nelexa\RoachPhpBundle\Maker\Downloader;
 
 use Nelexa\RoachPhpBundle\Maker\AbstractMaker;
 
-final class MakeRequestMiddleware extends AbstractMaker
+final class MakeResponseMiddleware extends AbstractMaker
 {
     public static function getCommandName(): string
     {
-        return 'make:roach:downloader:middleware:request';
+        return 'make:roach:middleware:downloader:response';
     }
 
-    public static function getCommandDescription(): string
+    protected static function getDescriptionClass(): string
     {
-        return 'Create a new roach downloader request middleware class';
+        return 'downloader response middleware';
     }
 
     protected function getSuffix(): string
     {
-        return 'RequestMiddleware';
+        return 'ResponseMiddleware';
     }
 
     protected function getNamespace(): string
@@ -37,13 +37,8 @@ final class MakeRequestMiddleware extends AbstractMaker
         return 'Spider\\Middleware\\Downloader\\';
     }
 
-    protected function getGenerateName(): string
-    {
-        return 'downloader request middleware';
-    }
-
     protected function getTemplateFilename(): string
     {
-        return __DIR__ . '/../../Resources/skeleton/Downloader/RequestMiddleware.tpl.php';
+        return __DIR__ . '/../../Resources/skeleton/Downloader/ResponseMiddleware.tpl.php';
     }
 }

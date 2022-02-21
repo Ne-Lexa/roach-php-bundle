@@ -1,5 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
+/*
+ * Copyright (c) 2022 Ne-Lexa <alexey@nelexa.ru>
+ *
+ * For the full copyright and license information, please view
+ * the LICENSE file that was distributed with this source code.
+ *
+ * @see https://github.com/Ne-Lexa/roach-php-bundle
+ */
+
 namespace Nelexa\RoachPhpBundle\Tests\Spider;
 
 use Nelexa\RoachPhpBundle\Tests\App\Spider\QuotesSpider;
@@ -9,8 +20,10 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
  * @medium
+ *
+ * @internal
  */
-class QuotesSpiderTest extends KernelTestCase
+final class QuotesSpiderTest extends KernelTestCase
 {
     private FakeLogger $logger;
 
@@ -21,8 +34,9 @@ class QuotesSpiderTest extends KernelTestCase
 
         $container = self::getContainer();
 
-        $logger = $container->get('logger');
-        static::assertNotNull($logger);
+        $logger = $container->get('roach_php.logger');
+        self::assertNotNull($logger);
+        self::assertInstanceOf(FakeLogger::class, $logger);
         $this->logger = $logger;
     }
 
@@ -33,29 +47,29 @@ class QuotesSpiderTest extends KernelTestCase
         self::assertTrue($this->logger->messageWasLogged('info', 'Run starting'));
         self::assertTrue(
             $this->logger->messageWasLogged('info', 'Item scraped', [
-                "text" => "“The world as we have created it is a process of our thinking. It cannot be changed without changing our thinking.”",
-                "author" => "Albert Einstein",
-                "tags" => [
-                    "change",
-                    "deep-thoughts",
-                    "thinking",
-                    "world",
-                ]
+                'text' => '“The world as we have created it is a process of our thinking. It cannot be changed without changing our thinking.”',
+                'author' => 'Albert Einstein',
+                'tags' => [
+                    'change',
+                    'deep-thoughts',
+                    'thinking',
+                    'world',
+                ],
             ])
         );
         self::assertTrue(
             $this->logger->messageWasLogged('info', 'Item scraped', [
-                "text" => "“... a mind needs books as a sword needs a whetstone, if it is to keep its edge.”",
-                "author" => "George R.R. Martin",
-                "tags" => [
-                    "books",
-                    "mind"
-                ]
+                'text' => '“... a mind needs books as a sword needs a whetstone, if it is to keep its edge.”',
+                'author' => 'George R.R. Martin',
+                'tags' => [
+                    'books',
+                    'mind',
+                ],
             ])
         );
         self::assertTrue(
             $this->logger->messageWasLogged('info', 'Dispatching request', [
-                "uri" => "https://quotes.toscrape.com/page/9/"
+                'uri' => 'https://quotes.toscrape.com/page/9/',
             ])
         );
         self::assertTrue($this->logger->messageWasLogged('info', 'Run statistics'));
