@@ -6,10 +6,10 @@ Symfony bundle for [Roach PHP](https://roach-php.dev).
 [![Packagist Version](https://img.shields.io/packagist/v/nelexa/roach-php-bundle)](https://packagist.org/packages/nelexa/roach-php-bundle)
 [![Packagist PHP Version Support](https://img.shields.io/packagist/php-v/nelexa/roach-php-bundle)](https://packagist.org/packages/nelexa/roach-php-bundle)
 [![Build Status](https://github.com/Ne-Lexa/roach-php-bundle/workflows/build/badge.svg)](https://github.com/Ne-Lexa/roach-php-bundle/actions)
-[![Build Status](https://scrutinizer-ci.com/g/Ne-Lexa/roach-php-bundle/badges/build.png?b=master)](https://scrutinizer-ci.com/g/Ne-Lexa/roach-php-bundle/build-status/master)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/Ne-Lexa/roach-php-bundle/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/Ne-Lexa/roach-php-bundle/?branch=master)
-[![Code Coverage](https://scrutinizer-ci.com/g/Ne-Lexa/roach-php-bundle/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/Ne-Lexa/roach-php-bundle/?branch=master)
-[![Packagist License](https://img.shields.io/packagist/l/nelexa/roach-php-bundle)](https://github.com/Ne-Lexa/roach-php-bundle/blob/master/LICENSE)
+[![Build Status](https://scrutinizer-ci.com/g/Ne-Lexa/roach-php-bundle/badges/build.png?b=main)](https://scrutinizer-ci.com/g/Ne-Lexa/roach-php-bundle/build-status/main)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/Ne-Lexa/roach-php-bundle/badges/quality-score.png?b=main)](https://scrutinizer-ci.com/g/Ne-Lexa/roach-php-bundle/?branch=main)
+[![Code Coverage](https://scrutinizer-ci.com/g/Ne-Lexa/roach-php-bundle/badges/coverage.png?b=main)](https://scrutinizer-ci.com/g/Ne-Lexa/roach-php-bundle/?branch=main)
+[![Packagist License](https://img.shields.io/packagist/l/nelexa/roach-php-bundle)](https://github.com/Ne-Lexa/roach-php-bundle/blob/main/LICENSE)
 
 > Roach is a complete web scraping toolkit for PHP. It is ~~a shameless clone~~ heavily inspired by the popular Scrapy package for Python.
 
