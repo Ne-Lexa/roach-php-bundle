@@ -3,12 +3,12 @@
 # roach-php-bundle
 Symfony bundle for [Roach PHP](https://roach-php.dev).
 
-[![Latest Stable Version](http://poser.pugx.org/nelexa/roach-php-bundle/v)](https://packagist.org/packages/nelexa/roach-php-bundle) [![PHP Version Require](http://poser.pugx.org/nelexa/roach-php-bundle/require/php)](https://packagist.org/packages/nelexa/roach-php-bundle)
+[![Latest Stable Version](https://poser.pugx.org/nelexa/roach-php-bundle/v)](https://packagist.org/packages/nelexa/roach-php-bundle) [![PHP Version Require](https://poser.pugx.org/nelexa/roach-php-bundle/require/php)](https://packagist.org/packages/nelexa/roach-php-bundle)
 [![Tests](https://github.com/Ne-Lexa/roach-php-bundle/actions/workflows/build.yml/badge.svg)](https://github.com/Ne-Lexa/roach-php-bundle/actions/workflows/build.yml)
 [![Build Status](https://scrutinizer-ci.com/g/Ne-Lexa/roach-php-bundle/badges/build.png?b=main)](https://scrutinizer-ci.com/g/Ne-Lexa/roach-php-bundle/build-status/main)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/Ne-Lexa/roach-php-bundle/badges/quality-score.png?b=main)](https://scrutinizer-ci.com/g/Ne-Lexa/roach-php-bundle/?branch=main)
 [![Code Coverage](https://scrutinizer-ci.com/g/Ne-Lexa/roach-php-bundle/badges/coverage.png?b=main)](https://scrutinizer-ci.com/g/Ne-Lexa/roach-php-bundle/?branch=main)
-[![License](http://poser.pugx.org/nelexa/roach-php-bundle/license)](https://packagist.org/packages/nelexa/roach-php-bundle)
+[![License](https://poser.pugx.org/nelexa/roach-php-bundle/license)](https://packagist.org/packages/nelexa/roach-php-bundle)
 
 > Roach is a complete web scraping toolkit for PHP. It is ~~a shameless clone~~ heavily inspired by the popular Scrapy package for Python.
 
