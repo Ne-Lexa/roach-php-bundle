@@ -3,13 +3,12 @@
 # roach-php-bundle
 Symfony bundle for [Roach PHP](https://roach-php.dev).
 
-[![Packagist Version](https://img.shields.io/packagist/v/nelexa/roach-php-bundle)](https://packagist.org/packages/nelexa/roach-php-bundle)
-[![Packagist PHP Version Support](https://img.shields.io/packagist/php-v/nelexa/roach-php-bundle)](https://packagist.org/packages/nelexa/roach-php-bundle)
+[![Latest Stable Version](http://poser.pugx.org/nelexa/roach-php-bundle/v)](https://packagist.org/packages/nelexa/roach-php-bundle) [![PHP Version Require](http://poser.pugx.org/nelexa/roach-php-bundle/require/php)](https://packagist.org/packages/nelexa/roach-php-bundle)
 [![Tests](https://github.com/Ne-Lexa/roach-php-bundle/actions/workflows/build.yml/badge.svg)](https://github.com/Ne-Lexa/roach-php-bundle/actions/workflows/build.yml)
 [![Build Status](https://scrutinizer-ci.com/g/Ne-Lexa/roach-php-bundle/badges/build.png?b=main)](https://scrutinizer-ci.com/g/Ne-Lexa/roach-php-bundle/build-status/main)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/Ne-Lexa/roach-php-bundle/badges/quality-score.png?b=main)](https://scrutinizer-ci.com/g/Ne-Lexa/roach-php-bundle/?branch=main)
 [![Code Coverage](https://scrutinizer-ci.com/g/Ne-Lexa/roach-php-bundle/badges/coverage.png?b=main)](https://scrutinizer-ci.com/g/Ne-Lexa/roach-php-bundle/?branch=main)
-[![Packagist License](https://img.shields.io/packagist/l/nelexa/roach-php-bundle)](https://github.com/Ne-Lexa/roach-php-bundle/blob/main/LICENSE)
+[![License](http://poser.pugx.org/nelexa/roach-php-bundle/license)](https://packagist.org/packages/nelexa/roach-php-bundle)
 
 > Roach is a complete web scraping toolkit for PHP. It is ~~a shameless clone~~ heavily inspired by the popular Scrapy package for Python.
 
@@ -111,6 +110,9 @@ php bin/console make:roach:middleware:spider:request
 ```bash
 php bin/console make:roach:middleware:spider:response
 ```
+
+## Screencast
+[![asciicast](https://asciinema.org/a/naGrp60zyNVQakQxV0v0Vnwvc.svg)](https://asciinema.org/a/naGrp60zyNVQakQxV0v0Vnwvc)
 
 ## Credits
 * [Ne-Lexa](https://github.com/Ne-Lexa)
