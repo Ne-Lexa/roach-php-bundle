@@ -29,9 +29,16 @@ class ItemNormalizer implements NormalizerInterface, CacheableSupportsMethodInte
         return $data instanceof ItemInterface;
     }
 
+    /**
+     * @param mixed $object
+     * @param string|null $format
+     * @param array $context
+     * @return array
+     *
+     * @psalm-suppress all
+     */
     public function normalize(mixed $object, ?string $format = null, array $context = []): array
     {
-        /** @psalm-suppress all */
         return $object->all();
     }
 }
