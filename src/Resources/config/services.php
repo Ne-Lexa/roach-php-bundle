@@ -84,6 +84,16 @@ return static function (ContainerConfigurator $container): void {
             service('event_dispatcher'),
         ])
     ;
+    $services->alias(\RoachPHP\Core\EngineInterface::class, \RoachPHP\Core\Engine::class);
+
+    $services
+        ->set(\RoachPHP\Core\Runner::class)
+        ->args([
+            service('service_container'),
+            service(\RoachPHP\Core\EngineInterface::class),
+        ])
+    ;
+    $services->alias(\RoachPHP\Core\RunnerInterface::class, \RoachPHP\Core\Runner::class);
 
     // Downloader and downloader middlewares
     $services
@@ -125,6 +135,7 @@ return static function (ContainerConfigurator $container): void {
         ->set(\Nelexa\RoachPhpBundle\Command\RunSpiderCommand::class)
         ->args([
             tagged_locator('roach_php.spider'),
+            service('serializer'),
         ])
         ->tag('console.command')
     ;
@@ -161,5 +172,11 @@ return static function (ContainerConfigurator $container): void {
     $services
         ->set(\Nelexa\RoachPhpBundle\Maker\Spider\MakeItemMiddleware::class)
         ->tag('maker.command')
+    ;
+
+    // normalizers
+    $services
+        ->set(\Nelexa\RoachPhpBundle\Normalizer\ItemNormalizer::class)
+        ->tag('serializer.normalizer', [])
     ;
 };
