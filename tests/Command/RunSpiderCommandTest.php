@@ -15,7 +15,6 @@ namespace Nelexa\RoachPhpBundle\Tests\Command;
 
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
-use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Tester\CommandTester;
 
 /**
@@ -23,7 +22,7 @@ use Symfony\Component\Console\Tester\CommandTester;
  *
  * @medium
  */
-class RunSpiderCommandTest extends KernelTestCase
+final class RunSpiderCommandTest extends KernelTestCase
 {
     public function testExecute(): void
     {
@@ -36,11 +35,7 @@ class RunSpiderCommandTest extends KernelTestCase
             'spider' => 'quotes',
         ]);
 
-        if (method_exists($commandTester, 'assertCommandIsSuccessful')) {
-            $commandTester->assertCommandIsSuccessful();
-        } else {
-            static::assertSame(Command::SUCCESS, $commandTester->getStatusCode());
-        }
+        $commandTester->assertCommandIsSuccessful();
     }
 
     public function testUnknownSpider(): void
@@ -54,7 +49,35 @@ class RunSpiderCommandTest extends KernelTestCase
             'spider' => 'unknown_spider',
         ]);
 
-        static::assertNotSame(0, $commandTester->getStatusCode());
-        static::assertStringContainsString('[ERROR] Unknown spider unknown_spider', $commandTester->getDisplay());
+        self::assertNotSame(0, $commandTester->getStatusCode());
+        self::assertStringContainsString('[ERROR] Unknown spider unknown_spider', $commandTester->getDisplay());
+    }
+
+    public function testSpiderCommandOutputToJsonFile(): void
+    {
+        $outputFilename = sys_get_temp_dir() . '/_roach-export.json';
+
+        $kernel = self::bootKernel();
+        $application = new Application($kernel);
+
+        $command = $application->find('roach:run');
+
+        try {
+            $commandTester = new CommandTester($command);
+            $commandTester->execute([
+                'spider' => 'quotes',
+                '--output' => $outputFilename,
+            ]);
+
+            $commandTester->assertCommandIsSuccessful();
+
+            self::assertFileExists($outputFilename);
+            $json = json_decode(file_get_contents($outputFilename), false, 512, \JSON_THROW_ON_ERROR);
+            self::assertNotEmpty($json);
+        } finally {
+            if (is_file($outputFilename)) {
+                unlink($outputFilename);
+            }
+        }
     }
 }
