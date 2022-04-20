@@ -16,7 +16,7 @@ jobs:
             matrix:
                 os: [ 'ubuntu-latest' ]
                 php: [ '8.0', '8.1' ]
-                symfony_version: [ '5.3.*', '5.4.*', '6.0.*' ]
+                symfony_version: [ '6.0.*' ]
                 dependency-version: [ 'prefer-lowest', 'prefer-stable' ]
 
         runs-on: ${{ matrix.os }}
@@ -65,7 +65,6 @@ jobs:
                 run: vendor/bin/simple-phpunit install
 
             -   name: Run psalm
-                if: matrix.symfony_version != '5.3.*'
                 run: vendor/bin/psalm
 
             -   name: Run tests with phpunit

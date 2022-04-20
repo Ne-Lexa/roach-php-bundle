@@ -23,6 +23,8 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\OutputStyle;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\DependencyInjection\ServiceLocator;
+use Symfony\Component\Serializer\Encoder\JsonEncode;
+use Symfony\Component\Serializer\SerializerInterface;
 
 final class RunSpiderCommand extends Command
 {
@@ -33,7 +35,7 @@ final class RunSpiderCommand extends Command
     /** @var array<class-string<\RoachPHP\Spider\SpiderInterface>, array<string>> */
     private array $spiderNames;
 
-    public function __construct(private ServiceLocator $serviceLocator)
+    public function __construct(private ServiceLocator $serviceLocator, private SerializerInterface $serializer)
     {
         /** @var array<class-string<\RoachPHP\Spider\SpiderInterface>> $providedServices */
         $providedServices = $this->serviceLocator->getProvidedServices();
@@ -55,6 +57,7 @@ final class RunSpiderCommand extends Command
             ->addArgument('spider', InputArgument::OPTIONAL, rtrim($spiderArgDescription))
             ->addOption('delay', 't', InputOption::VALUE_OPTIONAL, 'The delay (in seconds) between requests.')
             ->addOption('concurrency', 'p', InputOption::VALUE_OPTIONAL, 'The number of concurrent requests.')
+            ->addOption('output', 'o', InputOption::VALUE_OPTIONAL, 'Save to JSON file')
         ;
     }
 
@@ -107,6 +110,8 @@ final class RunSpiderCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        $io = new SymfonyStyle($input, $output);
+        $outputFilename = $input->getOption('output');
         $spiderName = $input->getArgument('spider');
         $spiderClassName = $this->findSpiderClass($spiderName);
 
@@ -135,7 +140,15 @@ final class RunSpiderCommand extends Command
             requestDelay: $delay,
         );
 
-        Roach::startSpider($spiderClassName, $overrides);
+        if ($outputFilename !== null) {
+            $collectData = Roach::collectSpider($spiderClassName, $overrides);
+
+            if (!$this->saveCollectData($collectData, $outputFilename, $io)) {
+                return self::FAILURE;
+            }
+        } else {
+            Roach::startSpider($spiderClassName, $overrides);
+        }
 
         return self::SUCCESS;
     }
@@ -154,5 +167,30 @@ final class RunSpiderCommand extends Command
         }
 
         return null;
+    }
+
+    private function saveCollectData(array $collectData, string $outputFilename, SymfonyStyle $io): bool
+    {
+        $content = $this->serializer->serialize($collectData, 'json', [
+            JsonEncode::OPTIONS => \JSON_UNESCAPED_UNICODE | \JSON_PRETTY_PRINT | \JSON_UNESCAPED_LINE_TERMINATORS | \JSON_UNESCAPED_SLASHES | \JSON_THROW_ON_ERROR,
+        ]);
+
+        $dirname = \dirname($outputFilename);
+
+        if (!is_dir($dirname) && !mkdir($dirname, 0755, true) && !is_dir($dirname)) {
+            $io->error(sprintf('Directory "%s" was not created', $dirname));
+
+            return false;
+        }
+
+        if (file_put_contents($outputFilename, $content) === false) {
+            $io->error(sprintf('An error occurred while saving output to file %s', $dirname));
+
+            return false;
+        }
+
+        $io->success(sprintf('Collected data successfully saved to file %s', $outputFilename));
+
+        return true;
     }
 }

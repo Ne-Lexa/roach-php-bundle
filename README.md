@@ -20,6 +20,12 @@ Add `nelexa/roach-php-bundle` to your composer.json file:
 composer require nelexa/roach-php-bundle
 ```
 
+## Versions & Dependencies
+| Bundle version | roach-php/core version | Symfony version | PHP version(s) |
+|----------------|------------------------|-----------------|----------------|
+| 0.3.0          | 0.3.0                  | ^5.3 \| ^6.0    | >= 8.0         |
+| 1.0.0          | 1.0.0                  | ^6.0            | >= 8.0         |
+
 #### Register the bundle:
 Register bundle into config/bundles.php (Flex did it automatically):
 ```php
@@ -57,6 +63,11 @@ Sometimes it is useful to override the number of concurrent requests and the pre
 php bin/console roach:php google --concurrency 8 --delay 2
 ```
 These options override the `$concurrency` and `$requestDelay` public properties of your spider.
+
+Add the `--output` (`-o`) option and you can save the collected data to a JSON file.
+```bash
+php bin/console roach:php google --output 'path/to/data.json'
+```
 
 ### Starting the REPL
 
