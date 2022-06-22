@@ -4,7 +4,7 @@
     "type": "symfony-bundle",
     "require": {
         "php": ">= 8.0",
-        "roach-php/core": "^1.0",
+        "roach-php/core": "~1.1.0",
         "symfony/config": "^6.0",
         "symfony/dependency-injection": "^6.0",
         "symfony/http-kernel": "^6.0",
