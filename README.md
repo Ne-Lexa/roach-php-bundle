@@ -24,7 +24,8 @@ composer require nelexa/roach-php-bundle
 | Bundle version | roach-php/core version | Symfony version | PHP version(s) |
 |----------------|------------------------|-----------------|----------------|
 | 0.3.0          | 0.3.0                  | ^5.3 \| ^6.0    | >= 8.0         |
-| 1.0.0          | 1.0.0                  | ^6.0            | >= 8.0         |
+| 1.0.0          | ^1.0.0                 | ^6.0            | >= 8.0         |
+| 1.1.0          | 1.1.*                  | ^6.0            | >= 8.0         |
 
 #### Register the bundle:
 Register bundle into config/bundles.php (Flex did it automatically):
