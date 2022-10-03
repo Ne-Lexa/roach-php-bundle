@@ -103,6 +103,12 @@ return static function (ContainerConfigurator $container): void {
             service('event_dispatcher'),
         ])
     ;
+	$services
+		->set(\RoachPHP\Downloader\Middleware\ExecuteJavascriptMiddleware::class)
+		->args([
+			service('roach_php.logger'),
+		])
+	;
     $services->set(\RoachPHP\Downloader\Middleware\CookieMiddleware::class);
     $services
         ->set(\RoachPHP\Downloader\Middleware\RequestDeduplicationMiddleware::class)
