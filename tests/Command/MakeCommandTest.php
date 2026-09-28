@@ -13,21 +13,17 @@ declare(strict_types=1);
 
 namespace Nelexa\RoachPhpBundle\Tests\Command;
 
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Small;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Tester\CommandTester;
 
-/**
- * @internal
- *
- * @small
- */
+#[Small]
 class MakeCommandTest extends KernelTestCase
 {
-    /**
-     * @dataProvider provideMakeCommand
-     */
+    #[DataProvider('provideMakeCommand')]
     public function testMakeCommand(
         string $commandName,
         array $input,
@@ -56,7 +52,7 @@ class MakeCommandTest extends KernelTestCase
         }
     }
 
-    public function provideMakeCommand(): iterable
+    public static function provideMakeCommand(): iterable
     {
         yield 'make:roach:spider' => [
             'make:roach:spider',

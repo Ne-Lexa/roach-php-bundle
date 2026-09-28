@@ -14,15 +14,12 @@ declare(strict_types=1);
 namespace Nelexa\RoachPhpBundle\Tests\Spider;
 
 use Nelexa\RoachPhpBundle\Tests\App\Spider\QuotesSpider;
+use PHPUnit\Framework\Attributes\Medium;
 use RoachPHP\Roach;
 use RoachPHP\Testing\FakeLogger;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
-/**
- * @medium
- *
- * @internal
- */
+#[Medium]
 final class QuotesSpiderTest extends KernelTestCase
 {
     private FakeLogger $logger;

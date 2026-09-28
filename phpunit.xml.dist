@@ -2,7 +2,7 @@
 
 <!-- https://phpunit.readthedocs.io/en/latest/configuration.html -->
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.5/phpunit.xsd"
+         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/11.5/phpunit.xsd"
          colors="true"
          bootstrap="tests/bootstrap.php"
 >
@@ -11,7 +11,7 @@
         <server name="APP_ENV" value="test" force="true" />
         <server name="SHELL_VERBOSITY" value="-1" />
         <server name="SYMFONY_PHPUNIT_REMOVE" value="" />
-        <server name="SYMFONY_PHPUNIT_VERSION" value="9.5" />
+        <server name="SYMFONY_PHPUNIT_VERSION" value="11.5" />
         <server name="SYMFONY_DEPRECATIONS_HELPER" value="disabled" />
         <server name="KERNEL_CLASS" value="Nelexa\RoachPhpBundle\Tests\App\Kernel" force="true" />
     </php>
@@ -22,16 +22,16 @@
         </testsuite>
     </testsuites>
 
-    <coverage processUncoveredFiles="true">
+    <source>
         <include>
             <directory suffix=".php">src</directory>
         </include>
         <exclude>
             <directory suffix=".tpl.php">.</directory>
         </exclude>
-    </coverage>
+    </source>
 
-    <listeners>
-        <listener class="Symfony\Bridge\PhpUnit\SymfonyTestsListener" />
-    </listeners>
+    <extensions>
+        <bootstrap class="Symfony\Bridge\PhpUnit\SymfonyExtension" />
+    </extensions>
 </phpunit>

@@ -13,15 +13,12 @@ declare(strict_types=1);
 
 namespace Nelexa\RoachPhpBundle\Tests\Command;
 
+use PHPUnit\Framework\Attributes\Medium;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Console\Tester\CommandTester;
 
-/**
- * @internal
- *
- * @medium
- */
+#[Medium]
 final class RunSpiderCommandTest extends KernelTestCase
 {
     public function testExecute(): void
