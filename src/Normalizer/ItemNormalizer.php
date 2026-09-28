@@ -20,7 +20,7 @@ class ItemNormalizer implements NormalizerInterface
 {
     public function getSupportedTypes(?string $format): array
     {
-        return [ItemInterface::class];
+        return [ItemInterface::class => true];
     }
 
     public function supportsNormalization(mixed $data, ?string $format = null, array $context = []): bool
