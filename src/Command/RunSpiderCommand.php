@@ -28,10 +28,6 @@ use Symfony\Component\Serializer\SerializerInterface;
 
 final class RunSpiderCommand extends Command
 {
-    protected static $defaultName = 'roach:run';
-
-    protected static $defaultDescription = 'Run the provided spider';
-
     /** @var array<class-string<\RoachPHP\Spider\SpiderInterface>, array<string>> */
     private array $spiderNames;
 
@@ -45,6 +41,10 @@ final class RunSpiderCommand extends Command
 
     protected function configure(): void
     {
+        $this
+            ->setName('roach:run')
+            ->setDescription('Run the provided spider');
+
         $spiderArgDescription = "Spider class name\nSupport spiders:\n";
 
         foreach ($this->spiderNames as $className => $aliases) {

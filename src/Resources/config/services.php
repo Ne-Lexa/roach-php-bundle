@@ -118,6 +118,23 @@ return static function (ContainerConfigurator $container): void {
     ;
     $services->set(\RoachPHP\Downloader\Middleware\RobotsTxtMiddleware::class);
     $services->set(\RoachPHP\Downloader\Middleware\UserAgentMiddleware::class);
+    // New in roach-php/core 3.x: drops responses with unallowed HTTP status.
+    // Configure per spider via the "handleStatus" option.
+    $services
+        ->set(\RoachPHP\Downloader\Middleware\HttpErrorMiddleware::class)
+        ->args([
+            service('roach_php.logger'),
+        ])
+    ;
+    // New in roach-php/core 3.x: assigns proxies to requests.
+    // Configure per spider via the "proxy" or "loader" options.
+    $services
+        ->set(\RoachPHP\Downloader\Middleware\ProxyMiddleware::class)
+        ->args([
+            service('service_container'),
+            service('roach_php.logger'),
+        ])
+    ;
 
     // Extensions
     $services

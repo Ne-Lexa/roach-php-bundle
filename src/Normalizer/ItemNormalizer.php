@@ -14,17 +14,16 @@ declare(strict_types=1);
 namespace Nelexa\RoachPhpBundle\Normalizer;
 
 use RoachPHP\ItemPipeline\ItemInterface;
-use Symfony\Component\Serializer\Normalizer\CacheableSupportsMethodInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
-class ItemNormalizer implements NormalizerInterface, CacheableSupportsMethodInterface
+class ItemNormalizer implements NormalizerInterface
 {
-    public function hasCacheableSupportsMethod(): bool
+    public function getSupportedTypes(?string $format): array
     {
-        return true;
+        return [ItemInterface::class => true];
     }
 
-    public function supportsNormalization(mixed $data, ?string $format = null): bool
+    public function supportsNormalization(mixed $data, ?string $format = null, array $context = []): bool
     {
         return $data instanceof ItemInterface;
     }

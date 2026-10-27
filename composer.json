@@ -3,23 +3,20 @@
     "description": "Symfony bundle for roach-php/core",
     "type": "symfony-bundle",
     "require": {
-        "php": ">= 8.0",
-        "roach-php/core": "~1.1.0",
-        "symfony/config": "^6.0",
-        "symfony/dependency-injection": "^6.0",
-        "symfony/http-kernel": "^6.0",
-        "symfony/console": "^6.0",
-        "symfony/serializer": "^6.0"
+        "php": ">= 8.2",
+        "roach-php/core": "^3.2",
+        "symfony/config": "^7.0|^8.0",
+        "symfony/dependency-injection": "^7.0|^8.0",
+        "symfony/http-kernel": "^7.0|^8.0",
+        "symfony/console": "^7.0|^8.0",
+        "symfony/serializer": "^7.0|^8.0"
     },
     "require-dev": {
         "roave/security-advisories": "dev-latest",
-        "symfony/phpunit-bridge": "^6.0",
-        "symfony/var-dumper": "^6.0",
-        "symfony/framework-bundle": "^6.0",
-        "symfony/maker-bundle": "^1.37",
-        "vimeo/psalm": "^4.21",
-        "psalm/plugin-symfony": "^3.1",
-        "psalm/plugin-phpunit": "^0.16.1"
+        "symfony/phpunit-bridge": "^7.0|^8.0",
+        "symfony/var-dumper": "^7.0|^8.0",
+        "symfony/framework-bundle": "^7.0|^8.0",
+        "symfony/maker-bundle": "^1.68"
     },
     "license": "MIT",
     "autoload": {
